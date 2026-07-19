@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        DB::table('employee_vaccinations')
+            ->whereNull('created_at')
+            ->update(['created_at' => now()]);
+
+        DB::table('employee_vaccinations')
+            ->whereNull('updated_at')
+            ->update(['updated_at' => now()]);
+
+        // Then safely alter the table
+        DB::statement("
+            ALTER TABLE `employee_vaccinations`
+            MODIFY `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            MODIFY `updated_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+        ");
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        DB::statement("
+            ALTER TABLE `employee_vaccinations`
+            MODIFY `created_at` TIMESTAMP NULL,
+            MODIFY `updated_at` TIMESTAMP NULL
+        ");
+    }
+};

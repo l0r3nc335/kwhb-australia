@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" width="21.2" height="14" viewBox="0 0 21.2 14">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #808495;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.5px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <g id="g84">
+      <g id="g86">
+        <g id="g88">
+          <g id="g94">
+            <path id="path96" class="cls-1" d="M4.7,9.3c1.1,0,2,.9,2,2s-.9,2-2,2-2-.9-2-2,.9-2,2-2Z"/>
+          </g>
+          <g id="g98">
+            <path id="path100" class="cls-1" d="M16.5,9.3c1.1,0,2,.9,2,2s-.9,2-2,2-2-.9-2-2,.9-2,2-2Z"/>
+          </g>
+          <g id="g102">
+            <path id="path104" class="cls-1" d="M2.7,11.2H.8v-3.9c0-.7.6-1.3,1.3-1.3h1.3s.3-2.6.5-4.1c0-.7.6-1.1,1.3-1.1h8.3c.6,0,1.1.4,1.3,1,.4,1.5,1.1,4.3,1.1,4.3h3.3c.7,0,1.3.6,1.3,1.3v3.9h-2"/>
+          </g>
+          <g id="g106">
+            <path id="path108" class="cls-1" d="M14.5,11.2h-7.9"/>
+          </g>
+          <g id="g110">
+            <path id="path112" class="cls-1" d="M15.8,6H3.4"/>
+          </g>
+          <g id="g114">
+            <path id="path116" class="cls-1" d="M10.6.8l1.3,5.2v5.2"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

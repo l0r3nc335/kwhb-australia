@@ -1,0 +1,313 @@
+<script setup>
+import complianceApi from "@/api/compliance/compliance";
+import toast from '@/composable/toast.js';
+import { useComplianceStore } from "@/store/complianceStore";
+import { requiredValidator } from '@core/utils/validators';
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar';
+
+
+const props = defineProps({
+  isDrawerOpen: {
+    type: Boolean,
+    required: true,
+  },
+  complianceData: {
+    type: Object,
+    required: true,
+  },
+})
+
+/*const complianceData = reactive({
+    status: '0',
+});*/
+
+const upload_file = ref(null)
+const loading = ref(false)
+const minDate = new Date();
+
+const refForm = ref()
+
+const emit = defineEmits([
+  'update:isDrawerOpen',
+  'refetch'
+])
+
+const complianceStore = useComplianceStore()
+
+const form = ref({
+  file_data: '',
+  file_url: '',
+})
+
+// 👉 drawer close
+const closeNavigationDrawer = () => {
+  emit('update:isDrawerOpen', false)
+}
+
+const handleDrawerModelValueUpdate = val => {
+  emit('update:isDrawerOpen', val)
+}
+
+onMounted( async () => {
+  await complianceStore.setCompliances();
+})
+
+const onSelectFile = () => {
+  const input = upload_file
+  const files = input.value.files
+  if (files && files[0]) {
+    const size = (files[0].size / 1024 / 1024).toFixed(2)
+    if (size > 5) {
+      toast(
+        'error',
+        'File size too large. Please select file not exceeding to 5mb'
+      )
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      form.value.file_data = files[0]
+      form.value.file_url = e.target.result
+    }
+    reader.readAsDataURL(files[0])
+  }
+}
+
+const triggerSelectFile = () => {
+  upload_file.value.click()
+}
+
+const formattedExpiryDate = computed({
+    get() {
+        return props.complianceData.expiry_date
+            ? formatDate(props.complianceData.expiry_date)
+            : '';
+    },
+    set(value) {
+        props.complianceData.expiry_date = value ? parseDate(value) : ''; // <- key fix
+    },
+    /*   get() {
+        return props.complianceData.expiry_date ? formatDate(props.complianceData.expiry_date) : '';
+    },
+    set(value) {
+        props.complianceData.expiry_date = parseDate(value);
+    }*/
+});
+
+const formatDate = (date) => {
+    const [year, month, day] = date.split('-');
+    return `${day}/${month}/${year}`;
+}
+
+const parseDate = (date) => {
+    //const [day, month, year] = date.split('/');
+    //return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+
+    if (!date) return ''; // <- handle clear case
+    const [day, month, year] = date.split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+}
+
+const updateCompliance = async () => {
+  try {
+    loading.value = true
+    const formData = new FormData()
+    const appendIfValid = (key, value) => {
+        if (value !== null && value !== undefined && value !== '') {
+            formData.append(key, value);
+        }
+    };
+
+    appendIfValid('id', props.complianceData.id);
+    appendIfValid('compliance', props.complianceData.compliance);
+    appendIfValid('expiry_date', props.complianceData.expiry_date);
+    appendIfValid('status', props.complianceData.status);
+    appendIfValid('file', form.value.file_data);
+    appendIfValid('file_status', props.complianceData.status  == 0 ? 'Applied' : '');
+    appendIfValid('comments', props.complianceData.comments);
+
+    const response = await complianceApi.update_employee_compliance(formData)
+    toast('success', response.message)
+    loading.value = false
+    emit('update:isDrawerOpen', false)
+    emit('refetch')
+  } catch (error) {
+    console.error(error)
+    loading.value = false
+    if (error.response && error.response.status === 422) {
+      const validationErrors = error.response.data.errors;
+
+      Object.values(validationErrors).forEach(errorMessages => {
+        errorMessages.forEach(message => {
+          toast('error', message);
+        });
+      });
+    } else {
+      toast('error', 'An unexpected error occurred. Please try again.');
+      console.error(error);
+    }
+  }
+}
+
+</script>
+
+<template>
+  <VNavigationDrawer
+    temporary
+    :width="500"
+    location="end"
+    class="scrollable-content px-3"
+    :model-value="props.isDrawerOpen"
+    @update:model-value="handleDrawerModelValueUpdate"
+  >
+    <AppDrawerHeaderSection
+      title="Edit Compliance"
+      @cancel="closeNavigationDrawer"
+    />
+
+    <PerfectScrollbar :options="{ wheelPropagation: false }">
+      <VCard flat>
+        <VCardText>
+          <VForm
+            ref="refForm"
+          >
+            <VRow>
+              <VCol cols="12">
+                <AppSelect
+                  v-model="complianceData.compliance"
+                  label="Select Type"
+                  placeholder="Certificate Type"
+                  item-title="name"
+                  item-value="name"
+                  :items="complianceStore.data.compliances"
+                  clearable
+                  :rules="[requiredValidator]"
+                  @update:modelValue="val => complianceData.compliance = val ?? []"
+                />
+              </VCol>
+
+              <VCol cols="12">
+                <AppDateTimePicker
+                  v-if="complianceData.status == 1"
+                  v-model="formattedExpiryDate"
+                  prepend-inner-icon="tabler-calendar-week"
+                  label="Expiry Date"
+                  placeholder="4 July 2025"
+                  :config="{ dateFormat: 'd-m-Y', minDate: new Date() }"
+                  :min-date="minDate"
+                  :enable-time-picker="false"
+                  :auto-apply="true"
+                  clearable
+                />
+                <!--VCheckbox label="Never"/-->
+              </VCol>
+
+              <VCol cols="12">
+                <div class="text-subtitle-1 text-medium-emphasis">Select Status</div>
+                <VRadioGroup inline v-model="complianceData.status">
+                  <VRadio
+                    label="Applied"
+                    :value="'0'"
+                    color="#CC4A04"
+                  />
+                  <VRadio
+                    label="Uploaded"
+                    :value="'1'"
+                    color="#CC4A04"
+                  />
+                </VRadioGroup>
+              </VCol>
+
+              <VCol cols="12" v-if="complianceData.status == '1'">
+                <div class="text-subtitle-1 text-medium-emphasis mb-2">Certification Upload</div>
+                <u v-if="complianceData.file || form.file_url" style="color: #5C7FFF;">{{ form.file_data ? form.file_data?.name : complianceData.file_name }}
+                    <VIcon icon="tabler-x" size="small" color="#E5E4E6" @click="complianceData.file = ''; form.file_url = ''; form.file_data = ''" class="ml-1"/></u>
+                <div v-else class="file_upload_wrapper justify-center mb-3 cursor-pointer">
+                    <VCol class="d-flex align-center justify-center no_image_wrapper background" @click="triggerSelectFile">
+                      <input
+                        ref="upload_file"
+                        type="file"
+                        name="upload_file"
+                        class="upload_file"
+                        accept=".pdf"
+                        @input="onSelectFile"
+                        style="display: none;"
+                      />
+                        <div class="text-center">
+                            <v-icon
+                                icon="tabler-upload"
+                                class="mb-3"
+                                size="x-large"
+                                style="background-color: #F1F0F2; padding: 5px; border-radius: 5px; color: #7D7A89;"
+                            ></v-icon>
+                            <p class="font-weight-medium">Drop files here or click to upload</p>
+                        </div>
+                    </VCol>
+                </div>
+              </VCol>
+
+              <VCol cols="12">
+                <div class="text-subtitle-1 text-medium-emphasis">Comments</div>
+                <AppTextarea
+                    placeholder="Comments"
+                    v-model="complianceData.comments"
+                    :rules="[requiredValidator]" />
+              </VCol>
+
+              <VCol cols="12" class="mt-3">
+                <VBtn
+                  class="me-3"
+                  @click="updateCompliance()"
+                  :loading="loading"
+                  :disabled="
+                        (!form.file_data && !props.complianceData.file && complianceData.status == 1) ||
+                        !complianceData.comments ||
+                        complianceData.compliance.length === 0"
+                >
+                  Update
+                </VBtn>
+                <VBtn
+                  variant="tonal"
+                  color="secondary"
+                  @click="closeNavigationDrawer"
+                >
+                  Cancel
+                </VBtn>
+              </VCol>
+            </VRow>
+          </VForm>
+        </VCardText>
+      </VCard>
+    </PerfectScrollbar>
+  </VNavigationDrawer>
+</template>
+<style scoped>
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.file_upload_wrapper {
+  position: relative;
+  display: flex;
+  border: 1px dashed #c9c8cd;
+  border-radius: 5px;
+  block-size: 100%;
+  block-size: 150px;
+}
+
+.v-theme--dark .file_upload_wrapper {
+  border: 1px dashed #595d74 !important;
+}
+
+.no_image_wrapper {
+  block-size: 100%;
+}
+:deep(.v-field__prepend-inner) {
+  color:darkgray !important;
+}
+</style>

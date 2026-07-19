@@ -1,0 +1,30 @@
+// @use "@styles/style.scss";
+
+// 👉 Vertical nav
+$layout-vertical-nav-z-index: 12 !default;
+$layout-vertical-nav-width: 250px;//300px !default;
+$layout-vertical-nav-collapsed-width: 100px !default;
+
+// 👉 Horizontal nav
+$layout-horizontal-nav-z-index: 11 !default;
+$layout-horizontal-nav-navbar-height: 64px !default;
+
+// 👉 Navbar
+$layout-vertical-nav-navbar-height: 64px !default;
+$layout-vertical-nav-navbar-is-contained: true !default;
+$layout-vertical-nav-layout-navbar-z-index: 11 !default;
+$layout-horizontal-nav-layout-navbar-z-index: 11 !default;
+
+// 👉 Main content
+$layout-boxed-content-width: 1440px !default;
+    //CUSTOM
+$layout_content_boarder: 1px solid #ebeff5!important;
+
+//  👉Footer
+$layout-vertical-nav-footer-height: 56px !default;
+
+// 👉 Layout overlay
+$layout-overlay-z-index: 11 !default;
+
+// 👉 RTL
+$enable-rtl-styles: true !default;

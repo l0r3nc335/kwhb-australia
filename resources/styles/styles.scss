@@ -1,0 +1,25 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.layout-nav-type-vertical .layout-vertical-nav .nav-group.active > .nav-group-label {
+    background-color: #007bff !important; /* Set your desired background color */
+    color: #fff !important; /* Set your desired text color */
+}
+
+select, input {
+    outline: none;
+}
+
+.v-overlay__scrim {
+    opacity: .3 !important;
+    background: black !important;
+}
+
+.v-avatar img {
+    background-color: rgb(var(--v-theme-primary));
+}
+
+.v-tab.v-tab {
+    padding: 0 40px;
+}

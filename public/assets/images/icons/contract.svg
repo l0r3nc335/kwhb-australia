@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="147.25441mm"
+   height="183.87224mm"
+   viewBox="0 0 147.2544 183.87223"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="kwhb_employee_division.svg"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm" />
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-32.119609,-39.163988)">
+    <path
+       id="path48"
+       d="M 114.3054,48.831733 V 85.39325 c 0,10.402111 8.44909,18.79645 18.87328,18.80734 h 36.53942 c 5.37664,0 9.65593,-4.32315 9.65593,-9.667119 0,-5.33278 -4.27929,-9.666811 -9.65593,-9.666811 h -36.53942 v 0.525641 h 0.54743 l -0.54743,-0.525641 v 0.525641 h 0.54743 V 48.8308 c 0,-5.332781 -4.38908,-9.666812 -9.76603,-9.666812 -5.26685,0 -9.65593,4.334031 -9.65593,9.666812"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.09728" />
+    <path
+       id="path49"
+       d="m 151.3935,213.3691 v -9.66712 H 59.990037 c -4.718166,-0.0108 -8.558888,-3.8625 -8.558888,-8.61363 V 67.112487 c 0,-4.751136 3.840722,-8.602744 8.558888,-8.61363 h 60.021083 l 40.05074,40.03988 v 96.549613 c 0,4.75113 -3.84039,8.60274 -8.66836,8.61363 v 9.66712 9.66681 c 15.47175,-0.0108 27.98053,-12.50878 27.98053,-27.94756 V 94.533471 c 0,-2.544307 -0.986,-5.036359 -2.85224,-6.836037 L 130.87481,41.995696 c -1.86624,-1.800922 -4.27929,-2.830464 -6.91286,-2.830464 H 59.990659 c -15.361954,0.01089 -27.87105,12.508785 -27.87105,27.947567 V 195.08866 c 0,15.43877 12.509096,27.93668 27.87105,27.94757 h 91.403461 v -9.66681"
+       style="fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1.09728" />
+  </g>
+</svg>
